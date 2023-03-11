@@ -4,7 +4,13 @@ import tkinter as tk
 from tkinter import *
 from PIL import Image, ImageTk
 import cv2
+from tkinter import filedialog
+from keras.models import load_model
 
+def loadModel():
+    filepath = filedialog.askopenfilename(filetypes=[("Modelo h5", "*.h5")])
+    model = load_model(filepath)
+    model.summary()
 
 predicciones = ['step-1','step-2','step-3'] #Solo para probar como imprimir las predicciones
 
@@ -34,12 +40,12 @@ prediction_frame = Frame(content, width=650, height=400,borderwidth=5,relief='ri
 #Area de la camara
 start_prediction = ttk.Button(content, text='Iniciar')
 stop_prediction = ttk.Button(content, text='Detener')
+loadModel_button = ttk.Button(content, text='Cargar modelo', command=loadModel)
+loadModel_button.grid(column=0, row=4, pady=5, sticky='ns')
 
 #Area de predicciones
 save_csv = Button(content,text='Save',bg='#33b249')
 delete = Button(content,text='Delete',bg='#f44336')
-
-
 
 #Posicionando elementos
 #Camara
