@@ -1,5 +1,5 @@
 1) Hacer que se pueda ejecutar el modelo en la interfaz. (Se puede usar como base el programa de real time que hizo el Enrique.)
-    1.1) Importar modelo.
+    1.1) Importar modelo. ✓
     1.2) Asignar una funcion al boton de "Iniciar" para que corra el modelo en tiempo real.
     1.3) Imprimir las predicciones en la caja de predictions, con su paso y su accuracy. 
     1.4) Guardar la informacion de la tarea anterior en alguna estructura de datos.

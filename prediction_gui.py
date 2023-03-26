@@ -7,10 +7,7 @@ import cv2
 import numpy as np
 from tensorflow.keras.models import load_model
 from collections import deque
-
-
-
-#running_inference = False
+import os, csv
 
 width_camera, height_camera = 600,450
 
@@ -86,6 +83,7 @@ def open_camera(capture, model, label_camara, log):
 
         if current_step:
             print(current_step)
+            print(total_time)
             resultado = ttk.Label(prediction_frame, text = current_step + ", accuracy: " + str(label_probability))
             resultado.grid(column=0,row=i)
             resultado2 = ttk.Label(prediction_frame, text = "Total time: " + str(total_time))
@@ -93,6 +91,7 @@ def open_camera(capture, model, label_camara, log):
             i += 1
         else:
             print('no step detected')
+            print(total_time)
             resultado = ttk.Label(prediction_frame,text="no step detected" + ", accuracy: " + str(label_probability) +
                     "\nTotal time: " + str(total_time))
             resultado.grid(column=0,row = i + 1)
@@ -106,7 +105,7 @@ def open_camera(capture, model, label_camara, log):
 
 def log(current_step, time_taken, total_time):
     print(current_step, time_taken, total_time)
-    return
+    return 
 
 def real_time(log=lambda *_ : None):
     model = select_model('v2\idles_model2.h5')
@@ -168,11 +167,16 @@ def real_time(log=lambda *_ : None):
         
         if current_step:
             print(current_step)
+
+            print(total_time)
+
             resultado = ttk.Label(prediction_frame,text=current_step)
             resultado.grid(column=0,row=i)
             i+=1
         else:
             print('no step detected')
+            print(total_time)
+
             resultado = ttk.Label(prediction_frame,text="no step detected")
             resultado.grid(column=0,row=i)
             i+=1
@@ -187,6 +191,43 @@ def start_inference():
     global running_inference
     running_inference = True
     print("Starting inference")
+
+    
+def reset_total_time():
+    global total_time, frames, current_step, frames_queue
+    total_time = 0.0
+    frames = 0
+    current_step = ""
+    frames_queue = deque(maxlen=SEQUENCE_LENGTH)
+
+def stop_inference():
+    global running_inference
+    global i
+    for widget in prediction_frame.grid_slaves():
+        if int(widget.grid_info()["row"]) >= i:
+            widget.grid_forget()
+    i = 0
+    running_inference = False
+
+def savecsv():
+    filename = "data.csv"
+    data_list = []
+    if os.path.exists(filename):
+        # Append data to existing file
+        with open(filename, mode='a', newline='') as file:
+            writer = csv.writer(file)
+            data_list.append([current_step, frames, total_time])
+            writer.writerows(data_list)
+            reset_total_time()
+    else:
+        # Create new file with header row and write data to it
+        with open(filename, mode='w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(["Step", "Frames", "Total Time"])
+            data_list.append([current_step, frames, total_time])
+            writer.writerows(data_list)
+            reset_total_time()
+
 
 def main():
     #Configuracion general de la ventana.
@@ -209,10 +250,11 @@ def main():
     #BOTONES
     #Area de la camara
     start_prediction = ttk.Button(content, text='Iniciar', command=start_inference)
-    stop_prediction = ttk.Button(content, text='Detener')
+    stop_prediction = ttk.Button(content, text='Detener', command=stop_inference)
 
     #Area de predicciones
-    save_csv = Button(content,text='Save',bg='#33b249')
+    save_csv = Button(content, text='Save', bg='#33b249', command=savecsv)
+
     delete = Button(content,text='Delete',bg='#f44336')
 
     #Posicionando elementos
@@ -270,7 +312,9 @@ def main():
     SEQUENCE_LENGTH = 30
     MIN_PROB = 0.8
 
-    global FPS, frames, frames_queue, current_step, total_time, label_probability
+
+    global FPS, frames, frames_queue, total_time, current_step, label_probability
+
     global i
     #FPS = int(capture.get(cv2.CAP_PROP_FPS))
     i = 0
