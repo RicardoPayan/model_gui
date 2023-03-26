@@ -9,9 +9,6 @@ from tensorflow.keras.models import load_model
 from collections import deque
 import os, csv
 
-
-#running_inference = False
-
 width_camera, height_camera = 600,450
 
 def select_model(src):
@@ -111,7 +108,7 @@ def log(current_step, time_taken, total_time):
     return 
 
 def real_time(log=lambda *_ : None):
-    model = select_model('realmodel2.h5')
+    model = select_model('v2\idles_model2.h5')
     
     if model is None:
         exit(0)
@@ -170,13 +167,16 @@ def real_time(log=lambda *_ : None):
         
         if current_step:
             print(current_step)
+
             print(total_time)
+
             resultado = ttk.Label(prediction_frame,text=current_step)
             resultado.grid(column=0,row=i)
             i+=1
         else:
             print('no step detected')
             print(total_time)
+
             resultado = ttk.Label(prediction_frame,text="no step detected")
             resultado.grid(column=0,row=i)
             i+=1
@@ -191,6 +191,7 @@ def start_inference():
     global running_inference
     running_inference = True
     print("Starting inference")
+
     
 def reset_total_time():
     global total_time, frames, current_step, frames_queue
@@ -227,11 +228,11 @@ def savecsv():
             writer.writerows(data_list)
             reset_total_time()
 
+
 def main():
     #Configuracion general de la ventana.
     root = Tk()
     root.title('Prediction')
-    
 
     #Declarando los frames y widgets
     #Area de la camara.
@@ -253,6 +254,7 @@ def main():
 
     #Area de predicciones
     save_csv = Button(content, text='Save', bg='#33b249', command=savecsv)
+
     delete = Button(content,text='Delete',bg='#f44336')
 
     #Posicionando elementos
@@ -310,7 +312,9 @@ def main():
     SEQUENCE_LENGTH = 30
     MIN_PROB = 0.8
 
+
     global FPS, frames, frames_queue, total_time, current_step, label_probability
+
     global i
     #FPS = int(capture.get(cv2.CAP_PROP_FPS))
     i = 0
