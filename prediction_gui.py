@@ -8,6 +8,7 @@ import numpy as np
 from tensorflow.keras.models import load_model
 from collections import deque
 import os, csv
+import sv_ttk as sv
 
 width_camera, height_camera = 600,450
 
@@ -233,6 +234,7 @@ def main():
     #Configuracion general de la ventana.
     root = Tk()
     root.title('Prediction')
+   
 
     #Declarando los frames y widgets
     #Area de la camara.
@@ -327,6 +329,8 @@ def main():
     label_probability = 0.0
 
     open_camera(capture, model, label_camara, log)
+
+    sv.set_theme('dark')
 
     root.mainloop() #Correr la interfaz.
 
