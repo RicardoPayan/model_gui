@@ -11,6 +11,7 @@ import os, csv
 import sv_ttk as sv
 
 width_camera, height_camera = 600,450
+ls = []
 
 def select_model(src):
     try:
@@ -100,6 +101,8 @@ def open_camera(capture, model, label_camara, log):
 
         if counter > 60:
             return 
+        
+        ls.append([current_step, total_time, label_probability])
 
     #Actualizar cada 10ms
     label_camara.after(10, lambda : open_camera(capture, model, label_camara, log))
@@ -109,7 +112,7 @@ def log(current_step, time_taken, total_time):
     return 
 
 def real_time(log=lambda *_ : None):
-    model = select_model('realmodel7.h5')
+    model = select_model('v2\idles_model2.h5')
     
     if model is None:
         exit(0)
@@ -212,21 +215,19 @@ def stop_inference():
 
 def savecsv():
     filename = "data.csv"
-    data_list = []
+    print(ls)
     if os.path.exists(filename):
         # Append data to existing file
         with open(filename, mode='a', newline='') as file:
             writer = csv.writer(file)
-            data_list.append([current_step, frames, total_time])
-            writer.writerows(data_list)
+            writer.writerows(ls)
             reset_total_time()
     else:
         # Create new file with header row and write data to it
         with open(filename, mode='w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(["Step", "Frames", "Total Time"])
-            data_list.append([current_step, frames, total_time])
-            writer.writerows(data_list)
+            writer.writerows(ls)
             reset_total_time()
 
 
