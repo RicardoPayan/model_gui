@@ -1,2 +1,5 @@
 v2\__pycache__
 v2\idles_model2.h5
+styles.py
+*.csv
+*.h5

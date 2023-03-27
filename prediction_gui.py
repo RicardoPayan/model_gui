@@ -109,7 +109,7 @@ def log(current_step, time_taken, total_time):
     return 
 
 def real_time(log=lambda *_ : None):
-    model = select_model('v2\idles_model2.h5')
+    model = select_model('realmodel7.h5')
     
     if model is None:
         exit(0)
@@ -293,7 +293,7 @@ def main():
     content.columnconfigure(4,weight=1)
     content.rowconfigure(1,weight=1)
 
-    model = select_model('realmodel2.h5')
+    model = select_model('realmodel7.h5')
 
     #Abrir la camara con opencv
     try:
