@@ -240,24 +240,24 @@ def main():
     #Area de la camara.
     content = ttk.Frame(root) #Content contiene todo los elementos de la ventana.
     camara_frame_label = ttk.Label(content,text="Real time model") #Label para titulo
-    camara_frame = ttk.Frame(content, borderwidth=5,relief='ridge',width=650,height=500) #Definiendo el frame donde se mostrara la camara
+    camara_frame = ttk.Frame(content, width=650,height=500) #Definiendo el frame donde se mostrara la camara
     label_camara = Label(camara_frame, text="Camara aqui") #Label que muestras las imagenes capturadas por la camara
 
     global prediction_label, prediction_frame
 
     #Zona de predicciones
     prediction_label = ttk.Label(content,text="Predictions")
-    prediction_frame = Frame(content, width=650, height=400,borderwidth=5,relief='ridge')
+    prediction_frame = Frame(content, width=650, height=400, relief='sunken', borderwidth=1)
 
     #BOTONES
     #Area de la camara
-    start_prediction = ttk.Button(content, text='Iniciar', command=start_inference)
-    stop_prediction = ttk.Button(content, text='Detener', command=stop_inference)
+    start_prediction = ttk.Button(content, text='Start', command=start_inference)
+    stop_prediction = ttk.Button(content, text='Stop', command=stop_inference)
 
     #Area de predicciones
-    save_csv = Button(content, text='Save', bg='#33b249', command=savecsv)
+    save_csv = ttk.Button(content, text='Save CSV', command=savecsv)
 
-    delete = Button(content,text='Delete',bg='#f44336')
+    delete = ttk.Button(content,text='Delete')
 
     #Posicionando elementos
     #Camara
@@ -269,7 +269,7 @@ def main():
     stop_prediction.grid(column=2,row=3,pady=5,sticky='ns')
 
     #Predicciones
-    prediction_label.grid(column=3,row=0,columnspan=2)
+    prediction_label.grid(column=3,row=0,columnspan=2,pady=5)
     prediction_frame.grid(column=3,row=1,columnspan=2,rowspan=2,padx=5,pady=5,sticky='nsew')
     save_csv.grid(column=3,row=3,padx=5,pady=5,sticky='ns')
     delete.grid(column=4,row=3,pady=5,sticky='ns')
